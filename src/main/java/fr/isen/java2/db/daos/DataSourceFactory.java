@@ -1,5 +1,9 @@
 package fr.isen.java2.db.daos;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 
 import org.sqlite.SQLiteDataSource;
@@ -25,5 +29,15 @@ public class DataSourceFactory {
 			dataSource.setUrl("jdbc:sqlite:sqlite.db");
 		}
 		return dataSource;
+	}
+	
+	public static Connection getDriverConnection() {
+		try {
+			return DriverManager.getConnection("jdbc:sqlite:sqlite.db");
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

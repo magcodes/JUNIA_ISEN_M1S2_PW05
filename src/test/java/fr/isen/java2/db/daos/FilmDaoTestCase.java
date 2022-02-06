@@ -21,7 +21,7 @@ public class FilmDaoTestCase {
 	
 	@Before
 	public void initDb() throws Exception {
-		Connection connection = DataSourceFactory.getDataSource().getConnection();
+		Connection connection = DataSourceFactory.getDriverConnection();
 		Statement stmt = connection.createStatement();
 		stmt.executeUpdate(
 				"CREATE TABLE IF NOT EXISTS genre (idgenre INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT , name VARCHAR(50) NOT NULL);");
@@ -70,17 +70,17 @@ public class FilmDaoTestCase {
 	 @Test
 	 public void shouldAddFilm() throws Exception {
 		// WHEN 
-			filmDao.addFilm(new Film(4,"4th Title",LocalDate.of(2022, 2, 6), new Genre(1, "Drama"), 666, "director 4", "summary of the fourth film"));
+			filmDao.addFilm(new Film(4,"Superman",LocalDate.of(2020, 12, 25), new Genre(2, "Comedy"), 123, "director 4", "summary of the fourth film"));
 			// THEN
-			try(Connection connection = DataSourceFactory.getDataSource().getConnection()){
+			try(Connection connection = DataSourceFactory.getDriverConnection()){
 				try(Statement statement = connection.createStatement()){
-					try(ResultSet resultSet = statement.executeQuery("SELECT * FROM film WHERE title='4th Title'")){
+					try(ResultSet resultSet = statement.executeQuery("SELECT * FROM film WHERE title='Superman'")){
 						assertThat(resultSet.next()).isTrue();
 						assertThat(resultSet.getInt("idfilm")).isNotNull();
-						assertThat(resultSet.getString("title")).isEqualTo("4th Title");
-						assertThat(resultSet.getDate("release_date").toLocalDate()).isEqualTo(LocalDate.of(2022, 2, 6));
-						assertThat(resultSet.getInt("genre_id")).isEqualTo(1);
-						assertThat(resultSet.getInt("duration")).isEqualTo(666);
+						assertThat(resultSet.getString("title")).isEqualTo("Superman");
+						assertThat(resultSet.getDate("release_date").toLocalDate()).isEqualTo(LocalDate.of(2020, 12, 25));
+						assertThat(resultSet.getInt("genre_id")).isEqualTo(2);
+						assertThat(resultSet.getInt("duration")).isEqualTo(123);
 						assertThat(resultSet.getString("director")).isEqualTo("director 4");
 						assertThat(resultSet.getString("summary")).isEqualTo("summary of the fourth film");
 						assertThat(resultSet.next()).isFalse();
